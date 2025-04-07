@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 @CrossOrigin
 public class LogicRest {
@@ -13,12 +15,17 @@ public class LogicRest {
     LogicTrade logicTrade = new LogicTrade();
     int counter = 0;
 
+    public LogicRest() throws IOException {
+    }
+
     @PostMapping("/sendOrder")
-    public String sendOrder(@RequestBody String requestBody) {
+    public String sendOrder(@RequestBody String requestBody) throws InterruptedException {
         System.out.println("requestBody from sendOrder: " + requestBody);
         counter++;
-        if(counter > 100) {
+        if(counter > 10) {
             logicTrade.tradeProcessing();
+            logicTrade.tradeMonitoring();
+            logicTrade.tradeMonitoring2();
             counter = 0;
         }
 
@@ -28,6 +35,7 @@ public class LogicRest {
         String result = "";
 
         String order = jsonObject.getString("order");
+//        Thread.sleep(2000);
         switch (order) {
             case "sell":
                 logicTrade.addOrderSell(jsonObject);

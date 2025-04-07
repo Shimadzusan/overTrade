@@ -24,6 +24,18 @@ public class InfluxDBLogic {
         influxDB.write(dbName, "autogen", point);
     }
 
+    public void sendDataMonitoring(int sizeSellOrderList, int sizeBuyOrderList, int sizeExeList) {
+        // Create a data point
+        Point point = Point.measurement("order_data")
+                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)  // Use the current timestamp
+                .addField("sizeSellOrderList", sizeSellOrderList)
+                .addField("sizeBuyOrderList", sizeBuyOrderList)
+                .addField("sizeExeOrderList", sizeExeList)
+                .build();
+        // Write the data point to InfluxDB
+        influxDB.write(dbName, "autogen", point);
+    }
+
     @Override
     protected void finalize() throws Throwable {
         try {
