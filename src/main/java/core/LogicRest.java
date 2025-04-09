@@ -14,6 +14,8 @@ public class LogicRest {
     InfluxDBLogic influx = new InfluxDBLogic();
     LogicTrade logicTrade = new LogicTrade();
     int counter = 0;
+    long incomeTrafficSize = 0;
+    long outcomeTrafficSize = 0;
 
     public LogicRest() throws IOException {
     }
@@ -21,11 +23,12 @@ public class LogicRest {
     @PostMapping("/sendOrder")
     public String sendOrder(@RequestBody String requestBody) throws InterruptedException {
         System.out.println("requestBody from sendOrder: " + requestBody);
+        incomeTrafficSize += requestBody.getBytes().length;
         counter++;
         if(counter > 10) {
             logicTrade.tradeProcessing();
             logicTrade.tradeMonitoring();
-            logicTrade.tradeMonitoring2();
+            logicTrade.tradeMonitoring2(incomeTrafficSize, outcomeTrafficSize);
             counter = 0;
         }
 
@@ -49,6 +52,7 @@ public class LogicRest {
                 influx.sendData("buy", volume, price);
                 break;
         }
+        outcomeTrafficSize += result.getBytes().length;
         return result;
     }
 }

@@ -16,6 +16,18 @@ public class LogicTrade {
 
     HTTPServer srv = new HTTPServer(3333);
 
+    static final Gauge incomeTrafficSize = Gauge.build()
+            .name("incomeTrafficSize")
+            .labelNames("incomeTrafficSize")
+            .help("A gauge that holds a specific value.")
+            .register();
+
+    static final Gauge outcomeTrafficSize = Gauge.build()
+            .name("outcomeTrafficSize")
+            .labelNames("outcomeTrafficSize")
+            .help("A gauge that holds a specific value.")
+            .register();
+
     static final Gauge sizeSellOrderListGauge = Gauge.build()
             .name("sizeSellOrderListGauge")
             .labelNames("sizeSellOrderListGauge")
@@ -39,17 +51,11 @@ public class LogicTrade {
 
     public boolean addOrderBuy(JSONObject order) {
         buyOrderList.add(order);
-//        PrometheusUtility.incrementCounter("countBuyOrder");
         return true;
     }
 
     public boolean addOrderSell(JSONObject order) {
-//        long beginTime = System.currentTimeMillis();
         sellOrderList.add(order);
-//        long endTime = System.currentTimeMillis() - beginTime;
-//        requests_2.labels("processing_time","332").inc(endTime);
-//        requests.labels("metric_counter","232").inc();
-
         return true;
     }
 
@@ -113,18 +119,24 @@ public class LogicTrade {
         return true;
     }
 
-    public boolean tradeMonitoring2() {
+    public boolean tradeMonitoring2(long incomeTraffic, long outcomeTraffic) {
         // Get the sizes of the lists
         int sizeSellOrderList = sellOrderList.size();
         int sizeBuyOrderList = buyOrderList.size();
         int sizeExeList = exeList.size();
 
-        String sellInstance = "sellOrderList";;
+        String sellInstance = "sellOrderList";
         sizeSellOrderListGauge.labels(sellInstance).set(sizeSellOrderList);
-        String buyInstance = "buyOrderList";;
+        String buyInstance = "buyOrderList";
         sizeBuyOrderListGauge.labels(buyInstance).set(sizeBuyOrderList);
-        String exeInstance = "exeOrderList";;
+        String exeInstance = "exeOrderList";
         sizeExeListGauge.labels(exeInstance).set(sizeExeList);
+
+        String incomeTrafficSize2 = "incomeTrafficSize";
+        incomeTrafficSize.labels(incomeTrafficSize2).set(incomeTraffic);
+
+        String outcomeTrafficSize2 = "outcomeTrafficSize";
+        outcomeTrafficSize.labels(outcomeTrafficSize2).set(outcomeTraffic);
 
         return true;
     }
