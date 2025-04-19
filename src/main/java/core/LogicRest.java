@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.io.IOException;
 
 @RestController
@@ -20,7 +19,7 @@ public class LogicRest {
     public LogicRest() throws IOException {
     }
 
-    @PostMapping("/sendOrder")
+        @PostMapping("/sendOrder")
     public String sendOrder(@RequestBody String requestBody) throws InterruptedException {
         System.out.println("requestBody from sendOrder: " + requestBody);
         incomeTrafficSize += requestBody.getBytes().length;
@@ -28,7 +27,7 @@ public class LogicRest {
         if(counter > 10) {
             logicTrade.tradeProcessing();
             logicTrade.tradeMonitoring();
-            logicTrade.tradeMonitoring2(incomeTrafficSize, outcomeTrafficSize);
+            logicTrade.tradeMonitoringPrometheus(incomeTrafficSize, outcomeTrafficSize);
             counter = 0;
         }
 

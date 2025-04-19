@@ -119,7 +119,7 @@ public class LogicTrade {
         return true;
     }
 
-    public boolean tradeMonitoring2(long incomeTraffic, long outcomeTraffic) {
+    public boolean tradeMonitoringPrometheus(long incomeTraffic, long outcomeTraffic) {
         // Get the sizes of the lists
         int sizeSellOrderList = sellOrderList.size();
         int sizeBuyOrderList = buyOrderList.size();
